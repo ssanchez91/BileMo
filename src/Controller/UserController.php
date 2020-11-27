@@ -5,15 +5,18 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Customer;
-use App\Repository\UserRepository;
+use App\Representation\Users;
 use App\Service\TokenService;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 /**
  *  User Controller 
@@ -59,15 +62,38 @@ class UserController extends AbstractFOSRestController
      *      
      * @ParamConverter("customer", options={"mapping":{"id":"id"}})
      * 
+     * @QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",
+     *     description="Sort order (asc or desc)"
+     * )
+     * 
+     * @QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="5",
+     *     description="Max number of phones per page."
+     * )
+     * 
+     * @QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="1",
+     *     description="The pagination offset"
+     * ) 
+     * 
      */
-    public function listAction(Customer $customer, Request $request, UserRepository $userRepository)
+    public function listAction(Customer $customer, Request $request, UserRepository $userRepository, ParamFetcher $paramFetcher)
     {
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
             return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
         }
 
-        return $userRepository->findBy(['customer' => $customer]);
+        $paginator =  $userRepository->listAll($paramFetcher->get('order'), $paramFetcher->get('limit'), $paramFetcher->get('offset'), $customer);        
+        
+        return new Users($paginator, $customer);
     }
 
     /**
