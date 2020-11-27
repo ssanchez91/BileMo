@@ -7,23 +7,26 @@ use App\Entity\User;
 use App\Entity\Customer;
 use App\Representation\Users;
 use App\Service\TokenService;
+use OpenApi\Annotations as OA;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Request\ParamFetcher;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use OpenApi\Annotations as OA;
-use Nelmio\ApiDocBundle\Annotation\Model;
 
 /**
  * User Controller
  * 
  * @OA\Tag(name="Users")
+ * 
+ * @Cache(expires="+2 hour", public=true)
  */
 class UserController extends AbstractFOSRestController
 {    
@@ -215,6 +218,8 @@ class UserController extends AbstractFOSRestController
 
     /**
      * Add a new user for customer id in url path
+     * 
+     * @Cache(mustRevalidate=true, public=true)
      * 
      * @Rest\Post(
      *      path = "/customers/{id}/users",
