@@ -6,11 +6,12 @@ use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  */
-class Customer
+class Customer implements UserInterface
 {
     /**
      * @ORM\Id
@@ -96,5 +97,43 @@ class Customer
         }
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        return [];
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword()
+    {
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+
     }
 }
