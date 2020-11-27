@@ -17,9 +17,13 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 /**
- *  User Controller 
+ * User Controller
+ * 
+ * @OA\Tag(name="Users")
  */
 class UserController extends AbstractFOSRestController
 {    
@@ -81,7 +85,42 @@ class UserController extends AbstractFOSRestController
      *     requirements="\d+",
      *     default="1",
      *     description="The pagination offset"
-     * ) 
+     * )
+     * 
+     * @OA\Parameter(
+     *    name="id",
+     *    in="path",
+     *    description="ID of customer that needs to be used",
+     *    required=true,
+     *    @OA\Schema(
+     *        type="integer",
+     *        format="int64"
+     *    )
+     *  )
+     * 
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns user details",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=User::class))
+     *     )     
+     * )
+     * 
+     * @OA\Response(
+     *     response = 401,
+     *     description = "You must use a valid token to complete this request"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 403,
+     *     description = "Forbidden access to this content"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 404,
+     *     description = "This resource doesn't exist !"
+     * )
      * 
      */
     public function listAction(Customer $customer, Request $request, UserRepository $userRepository, ParamFetcher $paramFetcher)
@@ -110,6 +149,52 @@ class UserController extends AbstractFOSRestController
      * @ParamConverter("user", options={"mapping": {"userId" : "id"}})
      * 
      * @Rest\View(StatusCode = 200)
+     * 
+     * @OA\Parameter(
+     *    name="customerId",
+     *    in="path",
+     *    description="ID of customer that needs to be used",
+     *    required=true,
+     *    @OA\Schema(
+     *        type="integer",
+     *        format="int64"
+     *    )
+     *  )
+     * 
+     * @OA\Parameter(
+     *    name="userId",
+     *    in="path",
+     *    description="ID of user that you want showing",
+     *    required=true,
+     *    @OA\Schema(
+     *        type="integer",
+     *        format="int64"
+     *    )
+     *  )
+     * 
+     *  @OA\Response(
+     *     response=200,
+     *     description="Returns user details",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=User::class))
+     *     )     
+     * )
+     * 
+     * @OA\Response(
+     *     response = 401,
+     *     description = "You must use a valid token to complete this request"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 403,
+     *     description = "Forbidden access to this content"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 404,
+     *     description = "This resource doesn't exist !"
+     * )
      * 
      * 
      */
@@ -141,6 +226,53 @@ class UserController extends AbstractFOSRestController
      * 
      * @ParamConverter("user", converter="fos_rest.request_body", options={"validator" : { "groups" : "Create" }}) 
      * @ParamConverter("customer", options={"mapping" : { "id" : "id" }}) 
+     * 
+     * @OA\RequestBody(
+     *     required=true,
+     *     @OA\MediaType(
+     *       mediaType="application/json",
+     *       @OA\Schema(
+     *         @OA\Property(property="firstname", type="string", example="John"),
+     *         @OA\Property(property="lastname", description="The lastname of the new user.", type="string", example="Doe"),
+     *         @OA\Property(property="username", description="The username of the new user.", type="string", example="jdoe91"),
+     *         @OA\Property(property="email", description="Email address of the new user.", type="string", format="email", example="j.doe91@yopmail.fr")
+     *       )
+     *     )
+     *   )
+     * 
+     * @OA\Parameter(
+     *    name="id",
+     *    in="path",
+     *    description="ID of customer that needs to be used",
+     *    required=true,
+     *    @OA\Schema(
+     *        type="integer",
+     *        format="int64"
+     *    )
+     *  )
+     * 
+     * @OA\Response(
+     *     response = 201,
+     *     description = "User successfully added to the Client",
+     *     @Model(type=User::class)
+     * )
+     * @OA\Response(
+     *     response = 400,
+     *     description = "Bad data sent, check fields and try again"
+     * )
+     * @OA\Response(
+     *     response = 401,
+     *     description = "You must use a valid token to complete this request"
+     * )
+     * @OA\Response(
+     *     response = 403,
+     *     description = "Forbidden access to this content"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 404,
+     *     description = "This resource doesn't exist !"
+     * )
      * 
      */
     public function createAction(Customer $customer, User $user, ConstraintViolationList $violations, Request $request) 
@@ -184,6 +316,49 @@ class UserController extends AbstractFOSRestController
      * )
      * 
      * @ParamConverter("user", options={"id" = "userId"}
+     * )
+     * 
+     * @OA\Parameter(
+     *    name="customerId",
+     *    in="path",
+     *    description="ID of customer that needs to be used",
+     *    required=true,
+     *    @OA\Schema(
+     *        type="integer",
+     *        format="int64"
+     *    )
+     *  )
+     * 
+     * @OA\Parameter(
+     *    name="userId",
+     *    in="path",
+     *    description="ID of user that you want deleting",
+     *    required=true,
+     *    @OA\Schema(
+     *        type="integer",
+     *        format="int64"
+     *    )
+     *  )
+     * 
+     * @OA\Response(
+     *     response = 204,
+     *     description = "User successfully deleted.",
+     *     )
+     * )
+     * 
+     * @OA\Response(
+     *     response = 401,
+     *     description = "You must use a valid token to complete this request"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 403,
+     *     description = "Forbidden access to this content"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 404,
+     *     description = "This resource doesn't exist !"
      * )
      * 
      * 

@@ -3,15 +3,17 @@ fos_rest:
     param_fetcher_listener:  true
     routing_loader: false
     body_listener: true   
+    view:
+        formats: { json: true, xml: false, rss: false }
+        view_response_listener:  true
+        mime_types:
+            json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
+    serializer:
+        serialize_null: true
     body_converter:
         enabled: true
         validate: true
         validation_errors_argument: violations
-    view:
-        view_response_listener: true
-        formats: { json: true, xml: false, rss: false }
-    serializer:
-        serialize_null: true    
     format_listener:
         rules:
             - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json ] }
@@ -22,3 +24,11 @@ fos_rest:
             { Symfony\Component\Routing\Exception\ResourceNotFoundException: 404 }
         messages:
             { Symfony\Component\Routing\Exception\ResourceNotFoundException: true }
+    versioning:
+        enabled: true
+        resolvers:
+            query: true # Query parameter: /users?version=v1
+            custom_header: true # X-Accept-Version header
+            media_type:
+                enabled: true
+                regex: '/(v|version)=(?P<version>[0-9\.]+)/'

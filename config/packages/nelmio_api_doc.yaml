@@ -1,0 +1,23 @@
+nelmio_api_doc:
+    documentation:
+        servers:
+          - url: https://127.0.0.1:8000/
+        info:
+            title: "BileMo - REST API"
+            description: Project 7 OCR => API REST - SSANCHEZ.
+            version: 2.0.0
+            contact: sanchez.steeve@gmail.com
+        components:
+            securitySchemes:
+                Bearer:
+                    type: apiKey
+                    description: 'Value: Bearer {JWT}'
+                    name: Authorization
+                    in: header
+        security:
+            - Bearer: [] 
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+    # models:
+    #     use_jms: false
