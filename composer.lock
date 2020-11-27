@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "494403cf4f21a389c2f8df8f002e576f",
+    "content-hash": "30985f39984973d26c8e2e2e6f8f6a42",
     "packages": [
         {
             "name": "amphp/amp",
@@ -3109,23 +3109,23 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.10.0",
+            "version": "v2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "3c9f4e7f5a0e0817de2dd88ae8347d4da4b0c57b"
+                "reference": "2c3448975c5560f4a29ac6f3bfc1fb24673609c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/3c9f4e7f5a0e0817de2dd88ae8347d4da4b0c57b",
-                "reference": "3c9f4e7f5a0e0817de2dd88ae8347d4da4b0c57b",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/2c3448975c5560f4a29ac6f3bfc1fb24673609c0",
+                "reference": "2c3448975c5560f4a29ac6f3bfc1fb24673609c0",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
                 "lcobucci/jwt": "^3.2",
                 "namshi/jose": "^7.2",
-                "php": ">=5.6",
+                "php": "^5.6|^7.0",
                 "symfony/framework-bundle": "^3.4|^4.0|^5.0",
                 "symfony/security-bundle": "^3.4|^4.0|^5.0"
             },
@@ -3203,7 +3203,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lexik/LexikJWTAuthenticationBundle/issues",
-                "source": "https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.0"
+                "source": "https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.9.0"
             },
             "funding": [
                 {
@@ -3211,7 +3211,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-23T15:31:35+00:00"
+            "time": "2020-10-27T17:30:41+00:00"
         },
         {
             "name": "monolog/monolog",
