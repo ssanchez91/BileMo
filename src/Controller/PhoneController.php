@@ -10,10 +10,14 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 
 /**
  * PhoneController class
+ * 
+ * @OA\Tag(name="Phones")
  */
 class PhoneController extends AbstractFOSRestController
 {
@@ -54,6 +58,20 @@ class PhoneController extends AbstractFOSRestController
      *     description="The pagination offset"
      * )
      * 
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a list of Phones",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Phone::class))
+     *     )
+     * )
+     * 
+     * @OA\Response(
+     *     response = 401,
+     *     description = "You must use a valid token to complete this request"
+     * )
+     * 
      */
     public function listAction(PhoneRepository $phoneRepository, ParamFetcher $paramFetcher)
     {  
@@ -71,7 +89,26 @@ class PhoneController extends AbstractFOSRestController
      *      requirements = {"id"="\d+"}
      * )
      * 
-     * @View(StatusCode = 200) 
+     * @View() 
+     * 
+     * @OA\Response(
+     *     response=200,
+     *     description="Return phone details",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Phone::class))
+     *     )
+     * )
+     * 
+     * @OA\Response(
+     *     response = 401,
+     *     description = "You must use a valid token to complete this request"
+     * )
+     * 
+     * @OA\Response(
+     *     response = 404,
+     *     description = "This phone Id doesn't exist !"
+     * )
      * 
      */
     public function showAction(Phone $phone): Phone
