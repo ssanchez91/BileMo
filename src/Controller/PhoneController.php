@@ -12,12 +12,15 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 
 /**
  * PhoneController class
  * 
  * @OA\Tag(name="Phones")
+ * 
+ * @Cache(expires="+1 hour", public=true)
  */
 class PhoneController extends AbstractFOSRestController
 {
