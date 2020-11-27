@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Customer;
 use App\Repository\UserRepository;
+use App\Service\TokenService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,14 +19,31 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  *  User Controller 
  */
 class UserController extends AbstractFOSRestController
-{
-
-    
+{    
+    /**
+     * EntityManagerInterface
+     *
+     * @var [type]
+     */
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    /**
+     * TokenService
+     * 
+     * @var [type]
+     */
+    private $tokenService;
+
+    /**
+     * __construct
+     *
+     * @param EntityManagerInterface $em
+     * @param TokenService $tokenService
+     */
+    public function __construct(EntityManagerInterface $em, TokenService $tokenService)
     {
         $this->em = $em;
+        $this->tokenService = $tokenService;
     }
 
     /**
@@ -42,8 +60,13 @@ class UserController extends AbstractFOSRestController
      * @ParamConverter("customer", options={"mapping":{"id":"id"}})
      * 
      */
-    public function listAction(Customer $customer, UserRepository $userRepository)
+    public function listAction(Customer $customer, Request $request, UserRepository $userRepository)
     {
+        if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
+        {
+            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+        }
+
         return $userRepository->findBy(['customer' => $customer]);
     }
 
@@ -64,8 +87,12 @@ class UserController extends AbstractFOSRestController
      * 
      * 
      */
-    public function showAction(Customer $customer, User $user)
-    {        
+    public function showAction(Customer $customer, User $user, Request $request)
+    {    
+        if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
+        {
+            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+        }    
 
         if($customer != $user->getCustomer())
         {
@@ -90,8 +117,12 @@ class UserController extends AbstractFOSRestController
      * @ParamConverter("customer", options={"mapping" : { "id" : "id" }}) 
      * 
      */
-    public function createAction(Customer $customer, User $user, ConstraintViolationList $violations) 
+    public function createAction(Customer $customer, User $user, ConstraintViolationList $violations, Request $request) 
     {
+        if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
+        {
+            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+        }
         
         if(count($violations) > 0)
         {
@@ -131,8 +162,12 @@ class UserController extends AbstractFOSRestController
      * 
      * 
      */
-    public function deleteAction(Customer $customer, User $user)
+    public function deleteAction(Customer $customer, User $user, Request $request)
     {
+        if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
+        {
+            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+        }
 
         if($customer != $user->getCustomer())
         {
