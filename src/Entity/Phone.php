@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as Serializer; 
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)

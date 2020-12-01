@@ -21,9 +21,16 @@ fos_rest:
     exception:
         enabled: true
         codes:
-            { Symfony\Component\Routing\Exception\ResourceNotFoundException: 404 }
+            {
+                \Exception: 500, 
+                Symfony\Component\Routing\Exception\ResourceNotFoundException: 404,
+                App\Exception\ForbiddenException: 403
+            }
         messages:
-            { Symfony\Component\Routing\Exception\ResourceNotFoundException: true }
+            { 
+                Symfony\Component\Routing\Exception\ResourceNotFoundException: true,
+                App\Exception\ForbiddenException: true
+            }
     versioning:
         enabled: true
         resolvers:
