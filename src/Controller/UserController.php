@@ -9,10 +9,12 @@ use App\Representation\Users;
 use App\Service\TokenService;
 use OpenApi\Annotations as OA;
 use App\Repository\UserRepository;
+use App\Exception\ForbiddenException;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
+use App\Exception\ResourceNoValidateException;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -130,7 +132,7 @@ class UserController extends AbstractFOSRestController
     {
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
-            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+            throw new ForbiddenException("Forbidden Access : this customer account is not yours");
         }
 
         $paginator =  $userRepository->listAll($paramFetcher->get('order'), $paramFetcher->get('limit'), $paramFetcher->get('offset'), $customer);        
@@ -205,12 +207,12 @@ class UserController extends AbstractFOSRestController
     {    
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
-            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+            throw new ForbiddenException("Forbidden Access : this customer account is not yours");
         }    
 
         if($customer != $user->getCustomer())
         {
-            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this user doesn't yours"]), Response::HTTP_FORBIDDEN);
+            throw new ForbiddenException("Forbidden Access : this user doesn't yours");
         }
 
         return $user;        
@@ -284,7 +286,7 @@ class UserController extends AbstractFOSRestController
     {
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
-            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+            throw new ForbiddenException("Forbidden Access : this customer account is not yours");
         }
         
         if(count($violations) > 0)
@@ -294,8 +296,7 @@ class UserController extends AbstractFOSRestController
             {
                 $message .= sprintf('Field %s: %s ', $violation->getPropertyPath(), $violation->getMessage());
             }
-            $response = json_encode(['code'=>400, 'message'=>$message]);
-            return new Response($response, Response::HTTP_BAD_REQUEST);
+            throw new ResourceNoValidateException($message);
         }
 
         $user->setCustomer($customer);        
@@ -372,12 +373,12 @@ class UserController extends AbstractFOSRestController
     {
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
-            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this customer account is not yours"]), Response::HTTP_FORBIDDEN);
+            throw new ForbiddenException("Forbidden Access : this customer account is not yours");
         }
 
         if($customer != $user->getCustomer())
         {
-            return new Response(json_encode(['code'=>403, 'message'=>"Forbidden Access : this user doesn't yours"]), Response::HTTP_FORBIDDEN);
+            throw new ForbiddenException("Forbidden Access : this user doesn't yours");
         }
         
         $this->em->remove($user);
