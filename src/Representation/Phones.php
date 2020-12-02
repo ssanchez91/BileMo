@@ -37,18 +37,7 @@ class Phones
 
         $this->data = $paginatedCollection->getInline()->getResources();
 
-        $this->addMeta('limit', $paginatedCollection->getLimit());
-        $this->addMeta('current_items', count($paginatedCollection->getInline()->getResources()));
-        $this->addMeta('total_items', $paginatedCollection->getTotal());
-        $this->addMeta('first_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=1');
-        $this->addMeta('last_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=' . $paginatedCollection->getPages());
-        if (($paginatedCollection->getPage()) > 1) {
-            $this->addMeta('previous_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=' . ($paginatedCollection->getPage()-1));
-        }        
-        $this->addMeta('current_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'='.$paginatedCollection->getPage());
-        if (($paginatedCollection->getPage()) < $paginatedCollection->getPages()) {
-            $this->addMeta('next_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=' . ($paginatedCollection->getPage() + 1));
-        }
+        $this->generateMetaNav($paginatedCollection);        
     }
 
     public function addMeta($name, $value)
@@ -63,5 +52,21 @@ class Phones
     public function setMeta($name, $value)
     {
         $this->meta[$name] = $value;
+    }
+
+    public function generateMetaNav($paginatedCollection)
+    {
+        $this->addMeta('limit', $paginatedCollection->getLimit());
+        $this->addMeta('current_items', count($paginatedCollection->getInline()->getResources()));
+        $this->addMeta('total_items', $paginatedCollection->getTotal());
+        $this->addMeta('first_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=1');
+        $this->addMeta('last_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=' . $paginatedCollection->getPages());
+        if (($paginatedCollection->getPage()) > 1) {
+            $this->addMeta('previous_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=' . ($paginatedCollection->getPage()-1));
+        }        
+        $this->addMeta('current_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'='.$paginatedCollection->getPage());
+        if (($paginatedCollection->getPage()) < $paginatedCollection->getPages()) {
+            $this->addMeta('next_page', $paginatedCollection->getRoute().$paginatedCollection->getPageParameterName().'=' . ($paginatedCollection->getPage() + 1));
+        }
     }
 }
