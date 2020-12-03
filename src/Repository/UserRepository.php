@@ -20,6 +20,15 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * listAll function
+     *
+     * @param string $order
+     * @param integer $limit
+     * @param integer $offset
+     * @param [type] $customer
+     * @return void
+     */
     public function listAll($order = 'desc', $limit = 5, $offset = 1, $customer)
     {
         $qb = $this->createQueryBuilder('u')

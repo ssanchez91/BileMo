@@ -10,6 +10,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * Customer Class
+ * 
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @Serializer\ExclusionPolicy("ALL")
  */

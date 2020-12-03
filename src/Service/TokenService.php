@@ -6,8 +6,16 @@ use App\Entity\Customer;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * TokenService class
+ */
 class TokenService
 {
+    /**
+     * jwt variable
+     *
+     * @var [type]
+     */
     protected $jwt;
     
     public function __construct(JWTEncoderInterface $jwt)

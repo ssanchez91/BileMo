@@ -8,6 +8,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Hateoas\Representation\PaginatedRepresentation;
 use Hateoas\Representation\CollectionRepresentation;
 
+/**
+ * representation Phones class
+ */
 class Phones
 {
     /**

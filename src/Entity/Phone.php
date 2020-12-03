@@ -8,6 +8,8 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer; 
 
 /**
+ * Phone Class
+ * 
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
  * 
  * @Hateoas\Relation(

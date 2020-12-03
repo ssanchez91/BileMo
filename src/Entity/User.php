@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
+ * User class
+ * 
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="This email address: {{ value }} already exist !", groups={"Create"})
  * @UniqueEntity(fields={"username"}, message="This username: {{ value }} already exist !", groups={"Create"})

@@ -2,8 +2,16 @@
 
 namespace App\Service;
 
+/**
+ * MetaService class
+ */
 class MetaService{
 
+    /**
+     * meta variable
+     *
+     * @var [type]
+     */
     protected $meta;
     
     public function __construct()
@@ -11,6 +19,12 @@ class MetaService{
         $this->meta = [];
     }
 
+    /**
+     * generateMetaNav function
+     *
+     * @param [type] $paginatedCollection
+     * @return void
+     */
     public function generateMetaNav($paginatedCollection)
     {
         $this->addMeta('limit', $paginatedCollection->getLimit());
@@ -29,6 +43,13 @@ class MetaService{
         return $this->meta;
     }
 
+    /**
+     * addMeta function
+     *
+     * @param [type] $name
+     * @param [type] $value
+     * @return void
+     */
     public function addMeta($name, $value)
     {
         if (isset($this->meta[$name])) {
@@ -38,10 +59,15 @@ class MetaService{
         $this->setMeta($name, $value);
     }
 
+    /**
+     * setMeta function
+     *
+     * @param [type] $name
+     * @param [type] $value
+     * @return void
+     */
     public function setMeta($name, $value)
     {
         $this->meta[$name] = $value;
-    }
-
-    
+    }    
 }

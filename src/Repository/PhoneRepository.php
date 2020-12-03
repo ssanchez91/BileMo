@@ -20,6 +20,15 @@ class PhoneRepository extends ServiceEntityRepository
         parent::__construct($registry, Phone::class);
     }
 
+    /**
+     * listAll function
+     *
+     * @param [type] $term
+     * @param string $order
+     * @param integer $limit
+     * @param integer $offset
+     * @return void
+     */
     public function listAll($term, $order = 'asc', $limit = 5, $offset = 1)
     {
         $qb = $this->createQueryBuilder('p')
