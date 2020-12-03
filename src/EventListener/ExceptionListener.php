@@ -11,8 +11,17 @@ use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use OpenApi\Annotations\Response as AnnotationsResponse;
 use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
+/**
+ * ExceptionListener class
+ */
 class ExceptionListener
 {
+    /**
+     * onKernelException function
+     *
+     * @param ExceptionEvent $event
+     * @return void
+     */
     public function onKernelException(ExceptionEvent $event)
     {
         // You get the exception object from the received event
@@ -28,6 +37,14 @@ class ExceptionListener
         $event->setResponse($response);
     }
 
+    /**
+     * prepareNewResponse function
+     *
+     * @param Response $response
+     * @param \Exception $exception
+     * @param [type] $message
+     * @return Response
+     */
     public function prepareNewResponse(Response $response, \Exception $exception, $message):Response
     {
         switch(true) {

@@ -9,6 +9,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Hateoas\Representation\PaginatedRepresentation;
 use Hateoas\Representation\CollectionRepresentation;
 
+/**
+ * representation Users class
+ */
 class Users
 {
     /**
