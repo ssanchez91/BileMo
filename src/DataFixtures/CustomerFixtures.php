@@ -16,7 +16,8 @@ class CustomerFixtures extends Fixture
         {
             $customer = (new Customer())
             ->setName('customer_'.$i)
-            ->setEmail('customer_'.$i.'@yopmail.fr');
+            ->setEmail('customer_'.$i.'@yopmail.fr')
+            ->setUpdatedAt(new \DateTime());
 
             $this->addReference(self::CUSTOMER_REFERENCE.$customer->getName(), $customer);
 

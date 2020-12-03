@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "friendsofsymfony/rest-bundle": "3.0.3",
+        "lcobucci/jwt": "3.3.3",
         "lexik/jwt-authentication-bundle": "2.9",
         "liip/test-fixtures-bundle": "^1.10",
         "nelmio/api-doc-bundle": "4.0",
