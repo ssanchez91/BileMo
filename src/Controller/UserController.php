@@ -15,7 +15,6 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
 use App\Exception\ResourceNoValidateException;
-use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -23,12 +22,13 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+
 /**
  * User Controller
  * 
  * @OA\Tag(name="Users")
  * 
- * @Cache(expires="+2 hour", public=true)
+ * 
  */
 class UserController extends AbstractFOSRestController
 {    
@@ -61,11 +61,14 @@ class UserController extends AbstractFOSRestController
     /**
      * Return the customer' users
      * 
+     * 
      * @Rest\Get(
      *     path = "/customers/{id}/users",
      *     name = "api_customers_users_list",
      *     requirements = {"id"="\d+"}
-     * )
+     * ) 
+     * 
+     * @Cache(lastModified="customer.getUpdatedAt()", public=true, Etag="'Customer' ~ customer.getId() ~ customer.getUpdatedAt().getTimestamp()", Expires="+1 day")
      * 
      * @Rest\View()
      *      
@@ -74,7 +77,7 @@ class UserController extends AbstractFOSRestController
      * @QueryParam(
      *     name="order",
      *     requirements="asc|desc",
-     *     default="asc",
+     *     default="desc",
      *     description="Sort order (asc or desc)"
      * )
      * 
@@ -129,14 +132,13 @@ class UserController extends AbstractFOSRestController
      * 
      */
     public function listAction(Customer $customer, Request $request, UserRepository $userRepository, ParamFetcher $paramFetcher)
-    {
+    {    
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
             throw new ForbiddenException("Forbidden Access : this customer account is not yours");
         }
-
-        $paginator =  $userRepository->listAll($paramFetcher->get('order'), $paramFetcher->get('limit'), $paramFetcher->get('offset'), $customer);        
         
+        $paginator =  $userRepository->listAll($paramFetcher->get('order'), $paramFetcher->get('limit'), $paramFetcher->get('offset'), $customer);        
         return new Users($paginator, $customer);
     }
 
@@ -148,6 +150,8 @@ class UserController extends AbstractFOSRestController
      *      name="api_users_show",
      *      requirements = {"customerId"="\d+", "userId"="\d+"}
      * )
+     * 
+     * @Cache(Expires="+1 day", lastModified="user.getCreatedAt()", Etag="'User' ~ user.getId() ~ user.getCreatedAt().getTimestamp()")
      * 
      * @ParamConverter("customer", options={"mapping": {"customerId" : "id"}})
      * 
@@ -221,7 +225,6 @@ class UserController extends AbstractFOSRestController
     /**
      * Add a new user for customer id in url path
      * 
-     * @Cache(mustRevalidate=true, public=true)
      * 
      * @Rest\Post(
      *      path = "/customers/{id}/users",
@@ -299,9 +302,13 @@ class UserController extends AbstractFOSRestController
             throw new ResourceNoValidateException($message);
         }
 
-        $user->setCustomer($customer);        
+        $postDate = new \DateTime();
+        $customer->setUpdatedAt($postDate);
+        $user->setCustomer($customer);
+        $user->setCreatedAt($postDate);        
+        $this->em->persist($customer);
         $this->em->persist($user);
-        $this->em->flush();
+        $this->em->flush();        
 
         return $user;
     }
@@ -381,6 +388,8 @@ class UserController extends AbstractFOSRestController
             throw new ForbiddenException("Forbidden Access : this user doesn't yours");
         }
         
+        $customer->setUpdatedAt(new \DateTime());
+        $this->em->persist($customer);
         $this->em->remove($user);
         $this->em->flush();
         return;

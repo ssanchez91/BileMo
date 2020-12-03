@@ -42,9 +42,5 @@ class Users
         $metaService = new MetaService();
         $this->meta = $metaService->generateMetaNav($paginatedCollection);
 
-    }
-
-
-
-   
+    }   
 }

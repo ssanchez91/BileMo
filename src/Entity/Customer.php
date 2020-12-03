@@ -40,6 +40,11 @@ class Customer implements UserInterface
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -140,5 +145,17 @@ class Customer implements UserInterface
     public function eraseCredentials()
     {
 
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }

@@ -37,14 +37,14 @@ class UserControllerTest extends WebTestCase
      *
      * @var int
      */
-    const USER_ID = 15;
+    const USER_ID = 33;
 
     /**
      * Represent a user Id that does not belong to the customer 2.
      *
      * @var int
      */
-    const BAD_USER_ID = 9;
+    const BAD_USER_ID = 30;
 
     /**
      * Represent a user Id that does not belong to the customer 2.
@@ -89,7 +89,7 @@ class UserControllerTest extends WebTestCase
         );
         $content = $this->client->getResponse()->getContent();
         $content = json_decode($content, true);
-
+        var_dump($content);
         $this->assertCount(5, $content['data']);
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
     }
@@ -140,7 +140,7 @@ class UserControllerTest extends WebTestCase
 
         $this->assertSame(Response::HTTP_UNAUTHORIZED,$this->client->getResponse()->getStatusCode());
     }
-
+    
     /**
      * Test get details of an existing user who belongs to a client.
      *
@@ -153,10 +153,8 @@ class UserControllerTest extends WebTestCase
             'GET',
             self::USERS_LIST_URI.'/'.self::USER_ID
         );
-
         $content = $this->client->getResponse()->getContent();
         $content = json_decode($content, true);
-
         $this->assertArrayHasKey('id', $content);
         $this->assertArrayHasKey('lastname', $content);
         $this->assertArrayHasKey('firstname', $content);
@@ -173,9 +171,9 @@ class UserControllerTest extends WebTestCase
     public function testGetUserNotYours(): void
     {
         $this->requestAuthenticated(
-            'customer_0@yopmail.fr',
+            'customer_1@yopmail.fr',
             'GET',
-            self::USERS_LIST_URI.'/'.self::BAD_USER_ID
+            self::USERS_LIST_URI.'/'.self::USER_ID
         );
         $this->assertSame(Response::HTTP_FORBIDDEN, $this->client->getResponse()->getStatusCode());
     }

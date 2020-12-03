@@ -20,7 +20,7 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function listAll($order = 'asc', $limit = 5, $offset = 1, $customer)
+    public function listAll($order = 'desc', $limit = 5, $offset = 1, $customer)
     {
         $qb = $this->createQueryBuilder('u')
             ->join('u.customer', 'c')
@@ -28,7 +28,7 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('customer', $customer->getId())
             ->setFirstResult(($offset - 1) * $limit)
             ->setMaxResults($limit)
-            ->orderBy('u.lastname', $order);
+            ->orderBy('u.id', $order);
 
         return new paginator($qb);
     }
