@@ -89,7 +89,7 @@ class UserControllerTest extends WebTestCase
         );
         $content = $this->client->getResponse()->getContent();
         $content = json_decode($content, true);
-        var_dump($content);
+        // var_dump($content);
         $this->assertCount(5, $content['data']);
         $this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
     }
