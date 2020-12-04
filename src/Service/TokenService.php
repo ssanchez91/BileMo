@@ -37,8 +37,6 @@ class TokenService
         /*Username (email in our case) used in the payload of the Token*/
         $username = $this->jwt->decode($token)['username'];
 
-        // dd($username, $customer->getEmail());
-
         if($username != $customer->getEmail())
         {
             return false;

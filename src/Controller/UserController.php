@@ -14,14 +14,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use App\Exception\ResourceNoValidateException;
+use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
 
 /**
  * User Controller
@@ -132,7 +133,7 @@ class UserController extends AbstractFOSRestController
      * 
      */
     public function listAction(Customer $customer, Request $request, UserRepository $userRepository, ParamFetcher $paramFetcher)
-    {    
+    {          
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
             throw new ForbiddenException("Forbidden Access : this customer account is not yours");
@@ -212,12 +213,9 @@ class UserController extends AbstractFOSRestController
         if($this->tokenService->compareUsernameInTokenWithIdInUrl($request, $customer) === false)
         {
             throw new ForbiddenException("Forbidden Access : this customer account is not yours");
-        }    
+        } 
 
-        if($customer != $user->getCustomer())
-        {
-            throw new ForbiddenException("Forbidden Access : this user doesn't yours");
-        }
+        $this->denyAccessUnlessGranted('SHOW', $user, "Forbidden Access : this user doesn't yours");
 
         return $user;        
     }
@@ -383,15 +381,12 @@ class UserController extends AbstractFOSRestController
             throw new ForbiddenException("Forbidden Access : this customer account is not yours");
         }
 
-        if($customer != $user->getCustomer())
-        {
-            throw new ForbiddenException("Forbidden Access : this user doesn't yours");
-        }
+        $this->denyAccessUnlessGranted('DELETE', $user, "Forbidden Access : this user doesn't yours");
         
         $customer->setUpdatedAt(new \DateTime());
         $this->em->persist($customer);
         $this->em->remove($user);
         $this->em->flush();
-        return;
+        return new Response(null, 204, []);
     }
 }
