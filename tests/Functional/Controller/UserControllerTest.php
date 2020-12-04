@@ -37,7 +37,7 @@ class UserControllerTest extends WebTestCase
      *
      * @var int
      */
-    const USER_ID = 33;
+    const USER_ID = 1;
 
     /**
      * Represent a user Id that does not belong to the customer 2.

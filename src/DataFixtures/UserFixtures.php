@@ -12,17 +12,19 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        
-        for($i = 0; $i < 50; $i++)
-        {
-            $customer = $this->getReference(CustomerFixtures::CUSTOMER_REFERENCE.'customer_'.rand(0,9)); 
+        for ($i = 0; $i < 50; $i++) {
+            if ($i < 10) {
+                $customer = $this->getReference(CustomerFixtures::CUSTOMER_REFERENCE . 'customer_0');
+            } else {
+                $customer = $this->getReference(CustomerFixtures::CUSTOMER_REFERENCE . 'customer_' . rand(1, 9));
+            }
             $user = (new User())
-            ->setFirstname('firstname_'.$i)
-            ->setLastname('lastname_'.$i)
-            ->setUsername('username_'.$i)
-            ->setEmail('user_'.$i.'@yopmail.fr')
-            ->setCreatedAt(new \DateTime())
-            ->setCustomer($customer);
+                ->setFirstname('firstname_' . $i)
+                ->setLastname('lastname_' . $i)
+                ->setUsername('username_' . $i)
+                ->setEmail('user_' . $i . '@yopmail.fr')
+                ->setCreatedAt(new \DateTime())
+                ->setCustomer($customer);
 
             $manager->persist($user);
         }
