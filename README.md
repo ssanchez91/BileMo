@@ -38,9 +38,17 @@ Les fonctoinnalités décrites dans les diagrammes concernent les clients, les u
 </ul>
 <h3>Suivre les étapes suivantes :</h3>
 <ul>
-  <li><b>Etape 1 :</b> Cloner le repository suivant depuis votre terminal :</li>
+  <li><b>Etape 1.1 :</b> Cloner le repository suivant depuis votre terminal :</li>
   <pre>
   <code>git clone https://github.com/ssanchez91/BileMo.git</code></pre>     
+  <li>
+   <li><b>Etape 1.2 :</b> Executer la commande suivante :</li>
+  <pre>
+  <code>composer install</code></pre>     
+  <li>
+    <li><b>Etape 1.3* :</b> Si besoins, ajouter le package symfony/apache-pack (en fonction de votre environnement de déploiement) :</li>
+  <pre>
+  <code>composer require symfony/apache-pack</code></pre>     
   <li><b>Etape 2 :</b> Editer le fichier .env </li>
     - pour renseigner vos paramètres de connexion à votre base de donnée dans la variable DATABASE_URL
   <li><b>Etape 3 :</b> Démarrer votre environnement local (Par exemple : Wamp Server)</li>
